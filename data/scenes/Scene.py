@@ -1,28 +1,32 @@
 import random
 import sys
-import pygame as pg
+import pygame
 
-from data.ui.Text import Text
 
 class Scene:
     def __init__(self, game):
         self.game = game
-        self.text = Text(text=str(self.__class__.__name__))
-        self.rand_color = random.SystemRandom().sample(range(0, 180), 3)
+
+        self.bg_color = pygame.Color("black")
+        self.fg_color = pygame.Color("white")
 
     def draw_background(self):
-        self.game.screen.fill(pg.Color(self.rand_color))
+        self.game.screen.fill(self.bg_color)
 
     def draw_foreground(self):
         self.text.draw(self.game.screen)
 
     def handle_exit(self, event):
-        if event.type in [pg.QUIT] or event.type in [pg.KEYDOWN] and event.key in [pg.K_ESCAPE]:
-            pg.quit()
+        if event.type in [pygame.QUIT] or event.type in [pygame.KEYDOWN] and event.key in [pygame.K_ESCAPE]:
+            pygame.quit()
             sys.exit()
 
     def handle_keys(self, event):
-        pass
+        if event.type in [pygame.KEYDOWN]:
+            if event.key in [pygame.K_a]:
+                self.game.scene_manager.previous_scene()
+            if event.key in [pygame.K_d]:
+                self.game.scene_manager.next_scene()
 
     def handle_mouse(self, event):
         pass
