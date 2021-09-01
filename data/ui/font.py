@@ -17,7 +17,7 @@ class Font:
 
     def set_size(self, size):
         self.size = size
-        self.font = pygame.font.Font(OPENDYSLEXIC_REGULAR, self.size)
+        self._font = pygame.font.Font(OPENDYSLEXIC_REGULAR, self.size)
 
     def get_font_size(self):
         return self.size
@@ -36,8 +36,6 @@ class Font:
             self.font = pygame.font.Font(OPENDYSLEXIC_BOLD, self.size)
         else:
             self.font = pygame.font.Font(OPENDYSLEXIC_REGULAR, self.size)
-        #else:
-        #    self.font.set_bold(is_on)
 
     def render(self, text, color):
         return self.font.render(text, True, color)

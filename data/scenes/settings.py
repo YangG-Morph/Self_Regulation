@@ -1,6 +1,6 @@
-from data.scenes.Scene import Scene
+from data.scenes.scene import Scene
 import pygame
-from data.ui.Text import Text
+from data.ui.text import Text
 
 
 
@@ -10,8 +10,7 @@ class Settings(Scene):
         self.text = Text(text=str(self.__class__.__name__))
         self.bg_color = pygame.Color("black")
         self.fg_color = pygame.Color("white")
-        self.text.font.set_size = 120
-        self.text.update()
+        self.text.set_size(54)
 
     def draw_background(self):
         self.game.screen.fill(self.bg_color)

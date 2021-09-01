@@ -20,6 +20,10 @@ class SceneManager:
             self.scenes.get(self.current_scene).handle_exit(event)
             self.scenes.get(self.current_scene).handle_keys(event)
             self.scenes.get(self.current_scene).handle_mouse(event)
+        self.scenes.get(self.current_scene).handle_mouse_movement()
+
+    def handle_time(self, dt):
+        self.scenes.get(self.current_scene).handle_time(dt)
 
     def current_index(self):
         return list(self.scenes.values()).index(self.scenes.get(self.current_scene))
