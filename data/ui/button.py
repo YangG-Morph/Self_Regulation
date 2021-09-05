@@ -1,30 +1,45 @@
-import pygame
+from pygame import Surface, mouse, draw
 
 from data.ui.text import Text
 from data.ui.base import Base
 
 class Button(Base):
-    def __init__(self, text="Click me", *args,**kwargs):
+    def __init__(self,r=0,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.text = Text(text=text, position=kwargs["position"], fg_color=kwargs["fg_color"])
-        self.text.set_size(12)
-        self.surface = pygame.Surface(self.size)
-        self.surface.fill(kwargs["bg_color"])
-        self.rect = self.surface.get_rect(center=self.position.xy)
+        self.r = r
+        self.is_enabled = True
 
     @property
-    def collide(self):
-        return self.rect.collidepoint(pygame.mouse.get_pos())
+    def hovered(self):
+        return self.rect.collidepoint(mouse.get_pos())
 
     @property
-    def pressed(self):
-        if self.collide and pygame.mouse.get_pressed()[0]:
+    def left_click(self):
+        if self.hovered and mouse.get_pressed()[0]:
             return True
         return False
 
+    @property
+    def right_click(self):
+        if self.hovered and mouse.get_pressed()[2]:
+            return True
+        return False
+
+    def left_action(self):
+        pass
+
+    def right_action(self):
+        pass
+
     def update(self):
-        self.text.position.xy = self.position.xy
-        self.rect.update(self.position.xy, self.rect.size)
+        if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
+            self.rect.update(self.position.xy, self.rect.size)
+
+        if self.left_click and not self.parent.component_clicked:
+            self.parent.component_clicked = True
+            self.left_action()
+        elif self.right_click and not self.parent.component_clicked:
+            self.parent.component_clicked = True
 
     def update_position(self, window_size):
         super().update_position(window_size)
@@ -35,8 +50,13 @@ class Button(Base):
         self.update()
 
     def draw(self, surface):
-        surface.blit(self.surface, self.position.xy)
-        self.text.draw(surface)
+        super().draw(surface)
+        if self.hovered:
+            surface.blit(self.hover_surface, self.position.xy)
+            draw.rect(surface, self.fg_color.lerp((0,0,0), 0.2), self.surface.get_rect(topleft=self.position.xy), 1, self.r)
+        else:
+            surface.blit(self.surface, self.position.xy)
+            draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, self.r)
 
 
 

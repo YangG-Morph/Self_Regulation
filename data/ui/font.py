@@ -1,11 +1,11 @@
 import pygame
 import os
-from data.assets.paths import OPENDYSLEXIC_REGULAR, OPENDYSLEXIC_BOLD
+from data.assets.paths import QUICKSAND_LIGHT, QUICKSAND_BOLD
 
 class Font:
     def __init__(self):
         self.size = 24
-        self._font = pygame.font.Font(OPENDYSLEXIC_REGULAR, self.size)
+        self._font = pygame.font.Font(QUICKSAND_LIGHT, self.size)
 
     @property
     def font(self):
@@ -17,7 +17,7 @@ class Font:
 
     def set_size(self, size):
         self.size = size
-        self._font = pygame.font.Font(OPENDYSLEXIC_REGULAR, self.size)
+        self._font = pygame.font.Font(QUICKSAND_LIGHT, self.size)
 
     def get_font_size(self):
         return self.size
@@ -33,9 +33,9 @@ class Font:
 
     def set_bold(self, is_on):
         if is_on:
-            self.font = pygame.font.Font(OPENDYSLEXIC_BOLD, self.size)
+            self.font = pygame.font.Font(QUICKSAND_BOLD, self.size)
         else:
-            self.font = pygame.font.Font(OPENDYSLEXIC_REGULAR, self.size)
+            self.font = pygame.font.Font(QUICKSAND_LIGHT, self.size)
 
     def render(self, text, color):
         return self.font.render(text, True, color)

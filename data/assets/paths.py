@@ -1,5 +1,7 @@
 import os
 import sys
+import pygame
+
 
 def real_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -12,6 +14,8 @@ def get_parent_dir(path):
 def font_path(filename):
     return real_path(os.path.join("fonts", filename))
 
+def image_path(filename):
+    return real_path(os.path.join("images", filename))
 
 ASSETS_DIR = os.path.abspath(os.path.dirname(__file__))
 DATA_DIR = get_parent_dir(ASSETS_DIR)
@@ -21,11 +25,14 @@ FONTS_DIR = os.path.join(ASSETS_DIR, "fonts")
 
 
 """ FONT """
-OPENDYSLEXIC_REGULAR = font_path("OpenDyslexic-Regular.otf")
-OPENDYSLEXIC_BOLD = font_path("OpenDyslexic-Bold.otf")
+QUICKSAND_LIGHT = font_path("Quicksand-Light.otf")
+QUICKSAND_BOLD = font_path("Quicksand-Bold.otf")
 
+
+""" IMAGES """
+BG = pygame.image.load(image_path("bg.jpg")).convert_alpha()
 
 #debug_filename = "debug.txt"
 #with open('debug_filename', 'w') as f:
-#    f.write(f"{OPENDYSLEXIC_REGULAR}\n"
-#            f"{OPENDYSLEXIC_BOLD}")
+#    f.write(f"{QUICKSAND_LIGHT}\n"
+#            f"{QUICKSAND_BOLD}")
