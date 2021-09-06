@@ -26,8 +26,8 @@ class App:
         self.fg_color = Color("white")
         self.bg_image = pygame.transform.smoothscale(BG, GAME_SIZE).convert_alpha()
 
-        self.back_panel = Panel(size=GAME_SIZE, bg_color=Color(50, 50, 50, 0).lerp((0, 0, 0), 0.5),
-                                fg_color=pygame.Color("red"), background_image=self.bg_image, )
+        self.back_panel = Panel(size=GAME_SIZE, bg_color=Color(0, 0, 0, 0).lerp((0, 0, 0), 0.5),
+                                fg_color=pygame.Color("red"), background_image=self.bg_image)
 
         self.top_panel = Panel(size=(GAME_SIZE[0], 200), bg_color=Color(50, 50, 50, 0).lerp((0, 0, 0), 0.5),
                                fg_color=pygame.Color("white"), margin=30)
@@ -35,13 +35,12 @@ class App:
         self.bottom_panel = Panel(size=(GAME_SIZE[0], GAME_SIZE[0]-750),
                                   bg_color=Color(50, 50, 50, 100).lerp((0, 0, 0), 0.5),
                                   fg_color=Color("lightblue").lerp((0, 0, 0), 0.2),
-                                  margin=30, margin_top=230,
+                                  margin=30, margin_top=150,
                                   )
-        self.text_task = TextLabel(text="Task:", size=(100, 100), position=(0, 0), font_size=50,
+        self.text_task = TextLabel(text="Tasks:", font_size=40,
                                    bg_color=Color("lightblue").lerp((0, 0, 0), 0.5), fg_color=Color("white"),
-                                   margin_left=0,
                                    )
-        self.text_input = TextInput(size=(100, 100),
+        self.text_input = TextInput(size=(100, 50),
                                     position=(0, 0),
                                     bg_color=Color("lightblue").lerp((0, 0, 0), 0.5),
                                     fg_color=Color("white"),

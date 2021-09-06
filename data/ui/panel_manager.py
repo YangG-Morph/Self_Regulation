@@ -23,7 +23,7 @@ class PanelManager:
                 raise TypeError(f"{panels} is not a Panel object. I only manage panels.")
 
     def update_position(self, window_size):
-        [panel.update_position(window_size) for panel in self.panels] # TODO working here
+        [panel.update_position(window_size) for panel in self.panels]
 
     def handle_key_press(self, event):
         [panel.handle_key_press(event) for panel in self.panels]

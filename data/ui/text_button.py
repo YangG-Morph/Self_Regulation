@@ -7,10 +7,11 @@ from data.ui.caret import Caret
 class TextButton(Button):
     def __init__(self,text="", font_size=24, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.text_object = Text(text=text, position=self.position, fg_color=self.fg_color)
+        self.text_object = Text(text=text, position=self.position, fg_color=self.fg_color, margin_left=10)
         self.text_object.set_font_size(font_size)
-        self.text_object.update_position(self.position.xy)
+        #self.text_object.update_position(self.position.xy)
         self.is_pressed = False
+        self.padding = 5
 
     @property
     def left_click(self):
@@ -25,17 +26,21 @@ class TextButton(Button):
         return False
 
     def update(self):
-        if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
-            self.rect.update(self.position.xy, self.rect.size)
+        super().update()
 
         if self.left_click and not self.parent.component_clicked:
-            self.parent.component_clicked = True  # TODO Not being set to True, by value and not reference?
+            self.parent.component_clicked = True
             self.left_action()
         elif self.right_click and not self.parent.component_clicked:
             self.parent.component_clicked = True
             self.set_for_delete = True
 
         self.position.y = (self.size.y + self.padding) * self.id + self.margin_top
+
+    def update_position(self, window_size):
+        super().update_position(window_size)
+        self.text_object.position.x = self.position.x + self.text_object.margin_left
+        self.text_object.position.y = self.position.y + (self.size.y + self.text_object.margin_top) / 8
 
     def left_action(self):
         pass  # print("Doing action")

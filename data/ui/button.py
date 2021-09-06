@@ -35,11 +35,11 @@ class Button(Base):
         if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
             self.rect.update(self.position.xy, self.rect.size)
 
-        if self.left_click and not self.parent.component_clicked:
-            self.parent.component_clicked = True
-            self.left_action()
-        elif self.right_click and not self.parent.component_clicked:
-            self.parent.component_clicked = True
+        #if self.left_click and not self.parent.component_clicked:
+        #    self.parent.component_clicked = True
+        #    self.left_action()
+        #elif self.right_click and not self.parent.component_clicked:
+        #    self.parent.component_clicked = True
 
     def update_position(self, window_size):
         super().update_position(window_size)

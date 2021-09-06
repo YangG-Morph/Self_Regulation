@@ -1,5 +1,5 @@
 import pygame.display
-from pygame import Rect, Surface, draw
+import pygame
 from data.ui.base import Base
 from data.constants import ALLOWED_KEYS
 
@@ -8,30 +8,36 @@ class Panel(Base):
         super().__init__(*args,**kwargs)
         self.components = []
         self.component_clicked = False
+        self._set_margins()
+
+
+    def _set_margins(self):  # TODO margins not setting properly
+        for attribute in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
+            if self.margin > 0 and getattr(self, attribute) == 0:
+                setattr(self, attribute, self.margin)
+
+    def _adding(self, element):
+        element.size.x = self.size.x / 2  # TODO remove?
+        element.rebuild_surface()
+        element.parent = self
+        element.margin += self.margin
+        for attribute in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
+            if getattr(self, attribute) != getattr(element, attribute):
+                setattr(element, attribute, getattr(element, attribute) + getattr(self, attribute))
+            else:
+                setattr(self, attribute, self.margin)
+                if not getattr(element, attribute):
+                    setattr(element, attribute, 0)
 
     def add(self, *elements):
         if isinstance(elements,(tuple, list)):
             for i, element in enumerate(elements):
                 element.id = max(0, min(len(self.components), len(self.components) + 1))
-                element.size.x = self.size.x / 2  # TODO remove?
-                element.rebuild_surface()
-                element.parent = self
-                element.margin += self.margin
-                element.margin_top += self.margin_top
-                element.margin_left += self.margin_left
-                element.margin_right += self.margin_right
-                element.margin_bottom += self.margin_bottom
+                self._adding(element)
                 self.components.append(element)
         else:
             elements[0].id = max(0, min(len(self.components), len(self.components) + 1))
-            elements[0].size.x = self.size.x / 2  # TODO remove?
-            elements[0].rebuild_surface()
-            elements[0].parent = self
-            elements[0].margin += self.margin
-            elements[0].margin_top += self.margin_top
-            elements[0].margin_left += self.margin_left
-            elements[0].margin_right += self.margin_right
-            elements[0].margin_bottom += self.margin_bottom
+            self._adding(elements[0])
             self.components.append(elements[0])
         self.update_position(pygame.display.get_surface().get_size())
 
@@ -109,14 +115,15 @@ class Panel(Base):
 
     def update_position(self, window_size):
         super().update_position(window_size)
+        self.size = pygame.Vector2(window_size)
+        self.rebuild_surface()
         [obj.update_position(self.size) for obj in self.components]
 
     def draw(self, surface):
         super().draw(surface)
-        if self.visible:
-            surface.blit(self.surface, self.position.xy)
-            #draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
-            [obj.draw(surface) for obj in self.components]
+        surface.blit(self.surface, self.position.xy)
+        #pygame.draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
+        [obj.draw(surface) for obj in self.components]
 
 
 

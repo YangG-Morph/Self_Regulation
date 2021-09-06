@@ -4,13 +4,14 @@ from data.ui.text import Text
 from data.ui.base import Base
 from data.ui.caret import Caret
 from data.ui.text_button import TextButton
+from data.ui.button import Button
 
-class TextInput(TextButton):
+class TextInput(Button):
     def __init__(self,text="", font_size=24, enter_press_action=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.text_object = Text(text=text, position=self.position, fg_color=self.fg_color)
+        self.text_object = Text(text=text, position=self.position, fg_color=self.fg_color, margin_left=10)
         self.text_object.set_font_size(font_size)
-        self.text_object.update_position(self.position.xy)
+        #self.text_object.update_position(self.position.xy)
         self.input_mode = False
         self.prev_text = text
         self.input_text = "Enter task here..."
@@ -30,8 +31,7 @@ class TextInput(TextButton):
         self.input_text = ""
 
     def update(self):
-        if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
-            self.rect.update(self.position.xy, self.rect.size)
+        super().update()
 
         if self.left_click and not self.parent.component_clicked:
             self.parent.component_clicked = True
@@ -44,6 +44,13 @@ class TextInput(TextButton):
         if self.prev_text != self.input_text:
             self.prev_text = self.input_text
             self.text_object.set_text(self.input_text)
+
+
+
+    def update_position(self, window_size):
+        super().update_position(window_size)
+        self.text_object.position.x = self.position.x + self.text_object.margin_left
+        self.text_object.position.y = self.position.y + (self.size.y + self.text_object.margin_top) / 8   # TODO Text position being reset
 
     def left_action(self):
         pass  # print("Doing action")

@@ -19,11 +19,12 @@ class Base:
                  visible=True,
                  background_image=None,
                  margin=0,
-                 margin_top=0,
+                 margin_top=0, # TODO Testing
                  margin_left=0,
                  margin_right=0,
                  margin_bottom=0,
-                 padding=10,
+                 padding=0,
+                 border=False,
                  ):
         self.size = Vector2(size)
         self.position = Vector2(position)
@@ -52,13 +53,14 @@ class Base:
         self.margin_right = margin_right
         self.margin_bottom = margin_bottom
         self.padding = padding
+        self.border = border
         self.start_pos = self.parent.position.xy if self.parent else (0, 0)
         self._set_margins()
 
-    def _set_margins(self):  # TODO margins not setting properly
-        for margin_value in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
-            if self.margin > 0 and getattr(self, margin_value) == 0:
-                setattr(self, margin_value, self.margin)
+    def _set_margins(self):
+        for attribute in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
+            if self.margin > 0 and getattr(self, attribute) == 0:
+                setattr(self, attribute, self.margin)
 
 
     def _center_both(self, window_size):
@@ -100,7 +102,7 @@ class Base:
         self.rebuild_surface()
         #self.position.y = (self.size.y + self.padding) * self.id + self.margin_top  # TODO refactor margin errors may be an issue
         if hasattr(self, "text_object"):
-            self.text_object.position = self.position
+            self.text_object.position.xy = self.position.xy
 
 
     def rebuild_surface(self):
@@ -120,6 +122,9 @@ class Base:
     def draw(self, surface):
         if self.background_image:
             surface.blit(self.stretched_background_image, (0, 0))
+
+        if self.border:
+            pygame.draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
 
 
 
