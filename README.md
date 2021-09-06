@@ -1,7 +1,12 @@
 # Self_Regulation
 
-WIP - Todo list. Alarms. Get Things Done.
+**WIP** - Todo list. Alarms. Get Things Done. <br />
+Set tasks, goals and alarms. <br />
 
-Set tasks/goals and set happy alarms.
+Do it now? What-? Yes? Maybe... <br />
 
-Time is an illusion; there is no past, there is no future. Only now and now is water. What-? Yes.
+## Assets:
+
+Background image: https://wenrexa.itch.io/abstractbq <br />
+OpenDyslexic font: https://opendyslexic.org/ <br />
+Quicksand font: https://www.fontsquirrel.com/fonts/quicksand <br />
