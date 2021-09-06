@@ -6,13 +6,13 @@ from data.ui.base import Base
 class Text(Base):
     def __init__(self,
                  text="None",
-                 text_size=24,
-                 *args,**kwargs
+                 font_size=24,
+                 *args, **kwargs
                  ):
         super().__init__(*args,**kwargs)
         self.text = text
         self.font = Font()
-        self.font.set_size(text_size)
+        self.font.set_size(font_size)
         self.rendered_text = self.font.render(self.text, self.fg_color)
         self.size = Vector2(self.rendered_text.get_size())
 

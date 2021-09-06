@@ -12,7 +12,7 @@ class Database:
     def connect(self):
         try:
             print("Connecting to database.")
-            num = 1/0
+            #num = 1/0
             self.connected = True
         except Exception as e:
             print(f"Error caught: {e}")

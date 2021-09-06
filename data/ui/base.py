@@ -4,9 +4,6 @@ from copy import deepcopy
 
 
 class Base:
-    margin = 30
-    padding = 10
-
     def __init__(self,
                  size=(10, 10),
                  position=(0, 0),
@@ -21,7 +18,12 @@ class Base:
                  parent=None,
                  visible=True,
                  background_image=None,
-                 margin=30,
+                 margin=0,
+                 margin_top=0,
+                 margin_left=0,
+                 margin_right=0,
+                 margin_bottom=0,
+                 padding=10,
                  ):
         self.size = Vector2(size)
         self.position = Vector2(position)
@@ -45,6 +47,20 @@ class Base:
         self.background_image = background_image
         self.stretched_background_image = background_image
         self.margin = margin
+        self.margin_top = margin_top
+        self.margin_left = margin_left
+        self.margin_right = margin_right
+        self.margin_bottom = margin_bottom
+        self.padding = padding
+        self.start_pos = self.parent.position.xy if self.parent else (0, 0)
+        self._set_margins()
+
+    def _set_margins(self):  # TODO margins not setting properly
+        for margin_value in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
+            if self.margin > 0 and getattr(self, margin_value) == 0:
+                #print("Setting margin for : ", margin_value, " to: ", self.margin)
+                setattr(self, margin_value, self.margin)
+
 
     def _center_both(self, window_size):
         self.position.xy = window_size[0] / 2 - self.size[0] / 2, window_size[1] / 2 - self.size[1] / 2
@@ -56,26 +72,40 @@ class Base:
         self.position.y = window_size[1] / 2 - self.size[1] / 2
 
     def center(self, window_size):
+        self.start_pos = self.parent.position.xy if self.parent else Vector2(0, 0)
+        from data.ui.panel import Panel
+        #print("Start pos: ", self.start_pos) if not isinstance(self, Panel) else None
         if self.center_x and self.center_y:
             self._center_both(window_size)
         elif self.center_x:
             self._center_x(window_size)
         elif self.center_y:
             self._center_y(window_size)
-        if self.position.x < self.margin:
-            self.position.x = self.margin
-        elif self.position.x > self.margin:
-            self.position.x = window_size[0] - self.margin
-        if self.position.y > window_size[1]:
-            self.position.y = window_size[1] - self.margin
-        elif self.position.y < self.margin:
-            self.position.y = self.margin
+
+        #print(self.__class__, self.margin_top) if not isinstance(self, Panel) else None
+        if self.position.x < self.margin_left:
+            self.position.x = self.margin_left + self.start_pos.x
+        elif self.position.x > window_size[0]:
+            self.position.x = window_size[0] - self.margin_right - self.start_pos[0]
+
+        if self.position.y < self.margin_top:
+            self.position.y = self.margin_top #+ self.start_pos.y
+            #print("Set to: ", self.position.y) if not isinstance(self, Panel) else None
+        elif self.position.y > window_size[1]:
+            self.position.y = window_size[1] - self.margin_bottom - self.start_pos[1]
+
 
         if self.background_image:
-            self.stretched_background_image = pygame.transform.smoothscale(self.background_image, window_size)
-        self.size.x = self.parent.size.x / 2
+            width = int(window_size.x)
+            height = int(window_size.y)
+            self.stretched_background_image = pygame.transform.smoothscale(self.background_image, (width, height))
+        if self.parent:
+            self.size.x = self.parent.size.x / 2
         self.rebuild_surface()
-        self.position.y = (self.size.y + self.padding) * self.id + self.margin
+        #self.position.y = (self.size.y + self.padding) * self.id + self.margin_top  # TODO refactor margin errors may be an issue
+        if hasattr(self, "text_object"):
+            self.text_object.position = self.position
+
 
     def rebuild_surface(self):
         self.surface = pygame.Surface(self.size).convert_alpha()
@@ -83,6 +113,13 @@ class Base:
         self.hover_surface = pygame.Surface(self.size).convert_alpha()
         self.hover_surface.fill(self.bg_color.lerp((255, 255, 255), 0.1))
         self.rect = self.surface.get_rect(center=self.position.xy)
+
+    def update(self, manager=None):
+        if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
+            self.rect.update(self.position.xy, self.rect.size)
+
+        if hasattr(manager, "component_clicked"):
+            pass
 
     def update_position(self, window_size):
         self.center(window_size)
