@@ -13,19 +13,18 @@ class Panel(Base):
         if isinstance(elements,(tuple, list)):
             for i, element in enumerate(elements):
                 element.id = max(0, min(len(self.components), len(self.components) + 1))
-                #element.size.x = self.size.x / 2
+                element.size.x = self.size.x / 2  # TODO remove?
                 element.rebuild_surface()
                 element.parent = self
                 element.margin += self.margin
                 element.margin_top += self.margin_top
-                #print(type(element),  element.margin_top)
                 element.margin_left += self.margin_left
                 element.margin_right += self.margin_right
                 element.margin_bottom += self.margin_bottom
                 self.components.append(element)
         else:
             elements[0].id = max(0, min(len(self.components), len(self.components) + 1))
-            #elements[0].size.x = self.size.x / 2
+            elements[0].size.x = self.size.x / 2  # TODO remove?
             elements[0].rebuild_surface()
             elements[0].parent = self
             elements[0].margin += self.margin
@@ -40,8 +39,9 @@ class Panel(Base):
         for component in self.components:
             if hasattr(component, "input_mode") and component.input_mode:
                 component.input_mode = False
+                component.input_text = "Enter task here..."
 
-    def update(self, manager):
+    def update(self):
         was_deleting = False
         for component in self.components:
             if component.set_for_delete:
@@ -53,7 +53,7 @@ class Panel(Base):
                 component.id = i
             window_size = pygame.display.get_surface().get_size()
             [obj.update_position(window_size) for obj in self.components]
-        [component.update(manager) for component in self.components]
+        [component.update() for component in self.components]
 
     def get_active_component(self):
         for component in self.components:
@@ -83,7 +83,6 @@ class Panel(Base):
                     component.input_text = component.input_text[:component.caret.x] + component.input_text[
                                                                                       component.caret.x + 1:]
             elif event.key in [pygame.K_RETURN, pygame.K_KP_ENTER]:
-                component.input_mode = False
                 if hasattr(component, "enter_press_action"):
                     if component.text_object.text.strip():
                         component.enter_press_action(component.text_object.text)
@@ -109,25 +108,14 @@ class Panel(Base):
                     component.input_text) else component.caret.x + 1
 
     def update_position(self, window_size):
-        #self.size.xy = window_size
-        #if self.size.x >= window_size[0]:
-        #    self.size.x = self.size.x - self.margin_right  #window_size[0] - self.margin_right  # TODO handle margin separately
-        #if self.size.y >= window_size[1]:
-        #    self.size.y = self.size.y - self.margin_bottom
-        #self.surface = Surface(self.size.xy).convert_alpha()
-        #self.surface.fill(self.bg_color)
         super().update_position(window_size)
-        #self.position.x = self.margin / 2 # TODO Here
-        #self.position.y = self.margin / 2
-        #if self.background_image:
-        #    self.stretched_background_image = pygame.transform.smoothscale(self.background_image, window_size)
         [obj.update_position(self.size) for obj in self.components]
 
     def draw(self, surface):
         super().draw(surface)
         if self.visible:
             surface.blit(self.surface, self.position.xy)
-            draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
+            #draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
             [obj.draw(surface) for obj in self.components]
 
 

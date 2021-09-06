@@ -31,16 +31,15 @@ class Button(Base):
     def right_action(self):
         pass
 
-    def update(self, manager=None):
+    def update(self):
         if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
             self.rect.update(self.position.xy, self.rect.size)
 
-        if hasattr(manager, "component_clicked"):
-            if self.left_click and not manager.component_clicked:
-                manager.component_clicked = True
-                self.left_action()
-            elif self.right_click and not manager.component_clicked:
-                manager.component_clicked = True
+        if self.left_click and not self.parent.component_clicked:
+            self.parent.component_clicked = True
+            self.left_action()
+        elif self.right_click and not self.parent.component_clicked:
+            self.parent.component_clicked = True
 
     def update_position(self, window_size):
         super().update_position(window_size)
@@ -52,7 +51,6 @@ class Button(Base):
 
     def draw(self, surface):
         super().draw(surface)
-        #print("Button pos: ", self.position.xy)
         if self.hovered:
             surface.blit(self.hover_surface, self.position.xy)
             draw.rect(surface, self.fg_color.lerp((0,0,0), 0.2), self.surface.get_rect(topleft=self.position.xy), 1, self.r)

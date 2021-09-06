@@ -4,7 +4,7 @@ from data.constants import GAME_SIZE, CAPTION
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode(GAME_SIZE, flags=pygame.RESIZABLE)# | pygame.NOFRAME)
+    screen = pygame.display.set_mode(GAME_SIZE, flags=pygame.RESIZABLE | pygame.NOFRAME)
     pygame.display.set_caption(CAPTION)
     pygame.key.set_repeat(500, 50)
 

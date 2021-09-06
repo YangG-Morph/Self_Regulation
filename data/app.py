@@ -32,17 +32,16 @@ class App:
         self.top_panel = Panel(size=(GAME_SIZE[0], 200), bg_color=Color(50, 50, 50, 0).lerp((0, 0, 0), 0.5),
                                fg_color=pygame.Color("white"), margin=30)
 
-        self.bottom_panel = Panel(size=(GAME_SIZE[0], 400),
+        self.bottom_panel = Panel(size=(GAME_SIZE[0], GAME_SIZE[0]-750),
                                   bg_color=Color(50, 50, 50, 100).lerp((0, 0, 0), 0.5),
                                   fg_color=Color("lightblue").lerp((0, 0, 0), 0.2),
-                                  margin=30, margin_top=250,
+                                  margin=30, margin_top=230,
                                   )
-        self.text_task = TextLabel(text="Task:", size=(200, 200), position=(0, 0), font_size=50,
+        self.text_task = TextLabel(text="Task:", size=(100, 100), position=(0, 0), font_size=50,
                                    bg_color=Color("lightblue").lerp((0, 0, 0), 0.5), fg_color=Color("white"),
                                    margin_left=0,
                                    )
-        self.text_input = TextInput(text="Enter task here",
-                                    size=(100, 100),
+        self.text_input = TextInput(size=(100, 100),
                                     position=(0, 0),
                                     bg_color=Color("lightblue").lerp((0, 0, 0), 0.5),
                                     fg_color=Color("white"),
@@ -52,17 +51,7 @@ class App:
                                     enter_press_action=lambda x: self._create_entry(x),
                                     )
 
-        #self.add_entry_button = Button(size=(100, 100),
-        #                               position=(800, 0),
-        #                               bg_color=Color("lightblue").lerp((0, 0, 0), 0.5),
-        #                               fg_color=Color("white"),
-        #                               align_right=True,  # TODO
-        #                               r=5,
-        #                               )
-
-        #self.add_entry_button.left_action = lambda: self._create_entry()
-        self._create_entry()
-        self.top_panel.add(self.text_task, self.text_input)#, self.add_entry_button)
+        self.top_panel.add(self.text_task, self.text_input)
         self.panel_manager.add(self.back_panel, self.top_panel, self.bottom_panel)
         self.panel_manager.update_position(Vector2(pygame.display.get_surface().get_size()))
 
@@ -99,11 +88,8 @@ class App:
         while True:
             self._handle_events()
 
-            # self.add_entry_button.update()
             self.panel_manager.update()
             self.panel_manager.draw()
-
-            # self.add_entry_button.draw(self.screen)
 
             self.clock.tick(FPS)
             pygame.display.flip()

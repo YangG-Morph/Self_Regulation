@@ -58,7 +58,6 @@ class Base:
     def _set_margins(self):  # TODO margins not setting properly
         for margin_value in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
             if self.margin > 0 and getattr(self, margin_value) == 0:
-                #print("Setting margin for : ", margin_value, " to: ", self.margin)
                 setattr(self, margin_value, self.margin)
 
 
@@ -73,8 +72,7 @@ class Base:
 
     def center(self, window_size):
         self.start_pos = self.parent.position.xy if self.parent else Vector2(0, 0)
-        from data.ui.panel import Panel
-        #print("Start pos: ", self.start_pos) if not isinstance(self, Panel) else None
+
         if self.center_x and self.center_y:
             self._center_both(window_size)
         elif self.center_x:
@@ -82,7 +80,6 @@ class Base:
         elif self.center_y:
             self._center_y(window_size)
 
-        #print(self.__class__, self.margin_top) if not isinstance(self, Panel) else None
         if self.position.x < self.margin_left:
             self.position.x = self.margin_left + self.start_pos.x
         elif self.position.x > window_size[0]:
@@ -90,7 +87,6 @@ class Base:
 
         if self.position.y < self.margin_top:
             self.position.y = self.margin_top #+ self.start_pos.y
-            #print("Set to: ", self.position.y) if not isinstance(self, Panel) else None
         elif self.position.y > window_size[1]:
             self.position.y = window_size[1] - self.margin_bottom - self.start_pos[1]
 
@@ -114,12 +110,9 @@ class Base:
         self.hover_surface.fill(self.bg_color.lerp((255, 255, 255), 0.1))
         self.rect = self.surface.get_rect(center=self.position.xy)
 
-    def update(self, manager=None):
+    def update(self):
         if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
             self.rect.update(self.position.xy, self.rect.size)
-
-        if hasattr(manager, "component_clicked"):
-            pass
 
     def update_position(self, window_size):
         self.center(window_size)

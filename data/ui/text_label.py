@@ -11,8 +11,6 @@ class TextLabel(Base):
         self.text_object.set_font_size(font_size)
         self.text_object.update_position(self.position.xy)
 
-
-
     def draw(self, surface):
         super().draw(surface)
         self.text_object.draw(surface)

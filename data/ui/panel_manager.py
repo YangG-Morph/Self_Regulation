@@ -37,16 +37,11 @@ class PanelManager:
     def update(self):
         panels_copy = self.panels.copy()
         panels_copy.reverse()
-
-        self.component_clicked = True if [panel for panel in panels_copy if panel.component_clicked is True] else False
+        self.component_clicked = True if [panel for panel in panels_copy if panel.component_clicked is True] else False # TODO panel not resetting properly
         if self.component_clicked:  # TODO only highlight one when dragging mouse over
             [setattr(panel, "component_clicked", True) for panel in self.panels]
 
-        [panel.update(self) for panel in panels_copy]
-
-        #self.component_clicked = True if [panel for panel in panels_copy if panel.component_clicked is True] else False
-        #if self.component_clicked:  # TODO only highlight one when dragging mouse over
-        #    [setattr(panel, "component_clicked", True) for panel in self.panels]
+        [panel.update() for panel in panels_copy]
 
     def draw(self):
         [panel.draw(self.screen) for panel in self.panels]
