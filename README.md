@@ -5,7 +5,15 @@ Set tasks, goals and alarms. <br />
 
 Do it now? What-? Yes? Maybe... <br />
 
-## Assets:
+
+### TODO:
+* Add alarms
+* Drag and drop tasks
+* Robot for emotional support
+* Add pizzazz and cheers when tasks are finished
+
+
+### Assets:
 
 Background image: https://wenrexa.itch.io/abstractbq <br />
 OpenDyslexic font: https://opendyslexic.org/ <br />
