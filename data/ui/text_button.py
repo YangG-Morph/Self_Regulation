@@ -9,7 +9,6 @@ class TextButton(Button):
         super().__init__(*args, **kwargs)
         self.text_object = Text(text=text, position=self.position, fg_color=self.fg_color, margin_left=10)
         self.text_object.set_font_size(font_size)
-        #self.text_object.update_position(self.position.xy)
         self.is_pressed = False
         self.padding = 5
 

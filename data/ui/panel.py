@@ -4,41 +4,40 @@ from data.ui.base import Base
 from data.constants import ALLOWED_KEYS
 
 class Panel(Base):
-    def __init__(self, *args,**kwargs):
+    def __init__(self, allow_database=None, *args,**kwargs):
         super().__init__(*args,**kwargs)
         self.components = []
         self.component_clicked = False
-        self._set_margins()
+        self.database = None
+        self.allow_database = allow_database
 
+    def _adding(self, component, create_type):
 
-    def _set_margins(self):  # TODO margins not setting properly
+        component.id = max(0, min(len(self.components), len(self.components) + 1))
+        print("Counting: ", len(self.components), " and set id: ", component.id)
+        component.size.x = self.size.x / 2  # TODO remove?
+        component.rebuild_surface()
+        component.parent = self
+        component.margin += self.margin
         for attribute in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
-            if self.margin > 0 and getattr(self, attribute) == 0:
-                setattr(self, attribute, self.margin)
-
-    def _adding(self, element):
-        element.size.x = self.size.x / 2  # TODO remove?
-        element.rebuild_surface()
-        element.parent = self
-        element.margin += self.margin
-        for attribute in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
-            if getattr(self, attribute) != getattr(element, attribute):
-                setattr(element, attribute, getattr(element, attribute) + getattr(self, attribute))
+            if getattr(self, attribute) != getattr(component, attribute):
+                setattr(component, attribute, getattr(component, attribute) + getattr(self, attribute))
             else:
                 setattr(self, attribute, self.margin)
-                if not getattr(element, attribute):
-                    setattr(element, attribute, 0)
+                if not getattr(component, attribute):
+                    setattr(component, attribute, 0)
+        print("Why is id: ", component.id)
+        if self.allow_database and create_type == "save":
+            self.database.insert(component.id, component.text_object.text)
+        self.components.append(component)
 
-    def add(self, *elements):
+    def add(self, *elements, create_type):
         if isinstance(elements,(tuple, list)):
             for i, element in enumerate(elements):
-                element.id = max(0, min(len(self.components), len(self.components) + 1))
-                self._adding(element)
-                self.components.append(element)
+                self._adding(element, create_type)
         else:
-            elements[0].id = max(0, min(len(self.components), len(self.components) + 1))
-            self._adding(elements[0])
-            self.components.append(elements[0])
+            self._adding(elements[0], create_type)
+        print("Did get here?")
         self.update_position(pygame.display.get_surface().get_size())
 
     def reset_components(self):
@@ -52,11 +51,18 @@ class Panel(Base):
         for component in self.components:
             if component.set_for_delete:
                 was_deleting = True
+                print("Deleting: ", component.text_object.text, " with id: ", component.id)
+                self.database.delete(component.id, component.text_object.text)
                 self.components.remove(component)
                 del component
         if was_deleting:
+            self.database.create_table("temp")
             for i, component in enumerate(self.components):
                 component.id = i
+                self.database.insert(component.id, component.text_object.text, "temp")
+            self.database.delete_all()
+            self.database.copy_from_temp()
+            self.database.delete_all("temp")
             window_size = pygame.display.get_surface().get_size()
             [obj.update_position(window_size) for obj in self.components]
         [component.update() for component in self.components]
@@ -70,7 +76,7 @@ class Panel(Base):
     def handle_key_press(self, event):
         component = self.get_active_component()
         if component and event.key in ALLOWED_KEYS:
-            if event.key == pygame.K_BACKSPACE:
+            if event.key == pygame.K_BACKSPACE:  #TODO CTRL + BACKSPACE not working at the front of text
                 if component.caret.x > 0:
                     if event.mod & pygame.KMOD_CTRL:
                         space = component.input_text.rfind(" ") + 1
@@ -91,7 +97,7 @@ class Panel(Base):
             elif event.key in [pygame.K_RETURN, pygame.K_KP_ENTER]:
                 if hasattr(component, "enter_press_action"):
                     if component.text_object.text.strip():
-                        component.enter_press_action(component.text_object.text)
+                        component.enter_press_action(component.text_object.text, create_type="save")
                         component.set_text("")
             elif event.key in [pygame.K_UP]:
                 component.caret.up()
@@ -106,6 +112,8 @@ class Panel(Base):
                 component.caret.x = 0
             elif event.key in [pygame.K_END]:
                 component.caret.x = len(component.input_text)
+            elif event.key in [pygame.K_ESCAPE]:
+                self.reset_components()
             else:
                 component.input_text = component.input_text[
                                        :component.caret.x] + event.unicode + component.input_text[

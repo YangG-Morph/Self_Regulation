@@ -11,11 +11,9 @@ class TextInput(Button):
         super().__init__(*args, **kwargs)
         self.text_object = Text(text=text, position=self.position, fg_color=self.fg_color, margin_left=10)
         self.text_object.set_font_size(font_size)
-        #self.text_object.update_position(self.position.xy)
         self.input_mode = False
         self.prev_text = text
         self.input_text = "Enter task here..."
-        self.original_text = text  # Store text_object when input started, restore when escape pressed
         self.caret = Caret(pygame.Vector2(1, self.text_object.size.y))
         self.is_pressed = False
         self.enter_press_action = enter_press_action

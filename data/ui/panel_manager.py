@@ -4,23 +4,26 @@ from data.ui.panel import Panel
 
 
 class PanelManager:
-    def __init__(self, screen=None, task_function=None):
+    def __init__(self, screen=None, database=None):
         self.panels = []  # TODO dictionary and set z_index?
         self.screen = screen
         self.component_clicked = False
+        self.database = database
+
+    def _adding(self, panel):
+        if isinstance(panel, Panel):
+            panel.database = self.database  # TODO Find a better way, too much passing around
+            self.panels.append(panel)
+        else:
+            raise TypeError(f"{panel} is not a Panel object. I only manage panels.")
 
     def add(self, *panels):
         if isinstance(panels, (list, tuple)):
             for panel in panels:
-                if isinstance(panel, Panel):
-                    self.panels.append(panel)
-                else:
-                    raise TypeError(f"{panel} is not a Panel object. I only manage panels.")
+                self._adding(panel)
         else:
-            if isinstance(panels, Panel):
-                self.panels.append(panels)
-            else:
-                raise TypeError(f"{panels} is not a Panel object. I only manage panels.")
+            print("Setting database 2")
+            self._adding(*panels)
 
     def update_position(self, window_size):
         [panel.update_position(window_size) for panel in self.panels]
@@ -37,7 +40,7 @@ class PanelManager:
     def update(self):
         panels_copy = self.panels.copy()
         panels_copy.reverse()
-        self.component_clicked = True if [panel for panel in panels_copy if panel.component_clicked is True] else False # TODO panel not resetting properly
+        self.component_clicked = True if [panel for panel in panels_copy if panel.component_clicked is True] else False
         if self.component_clicked:  # TODO only highlight one when dragging mouse over
             [setattr(panel, "component_clicked", True) for panel in self.panels]
 

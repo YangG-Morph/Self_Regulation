@@ -19,7 +19,7 @@ class Base:
                  visible=True,
                  background_image=None,
                  margin=0,
-                 margin_top=0, # TODO Testing
+                 margin_top=0,
                  margin_left=0,
                  margin_right=0,
                  margin_bottom=0,
@@ -100,7 +100,7 @@ class Base:
         if self.parent:
             self.size.x = self.parent.size.x / 2
         self.rebuild_surface()
-        #self.position.y = (self.size.y + self.padding) * self.id + self.margin_top  # TODO refactor margin errors may be an issue
+
         if hasattr(self, "text_object"):
             self.text_object.position.xy = self.position.xy
 

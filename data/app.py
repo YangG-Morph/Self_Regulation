@@ -18,9 +18,8 @@ class App:
         self.screen = screen
         self.screen.set_alpha(None)
         self.clock = pygame.time.Clock()
-        self.panel_manager = PanelManager(screen)
-        self.db = Database()
-        self.db.connect()
+        self.database = Database()
+        self.panel_manager = PanelManager(screen, database=self.database)
 
         self.bg_color = Color("black")
         self.fg_color = Color("white")
@@ -35,7 +34,7 @@ class App:
         self.bottom_panel = Panel(size=(GAME_SIZE[0], GAME_SIZE[0]-750),
                                   bg_color=Color(50, 50, 50, 100).lerp((0, 0, 0), 0.5),
                                   fg_color=Color("lightblue").lerp((0, 0, 0), 0.2),
-                                  margin=30, margin_top=150,
+                                  margin=30, margin_top=150, allow_database=True,
                                   )
         self.text_task = TextLabel(text="Tasks:", font_size=40,
                                    bg_color=Color("lightblue").lerp((0, 0, 0), 0.5), fg_color=Color("white"),
@@ -47,14 +46,19 @@ class App:
                                     align_left=True,
                                     r=5,
                                     margin_left=150,
-                                    enter_press_action=lambda x: self._create_entry(x),
+                                    enter_press_action=lambda text, create_type: self._create_entry(text=text, create_type=create_type),
                                     )
 
-        self.top_panel.add(self.text_task, self.text_input)
         self.panel_manager.add(self.back_panel, self.top_panel, self.bottom_panel)
         self.panel_manager.update_position(Vector2(pygame.display.get_surface().get_size()))
+        self.top_panel.add(self.text_task, self.text_input, create_type=None)
+        self._load_tasks()
 
-    def _create_entry(self, text="Text shows up here"):
+    def _load_tasks(self):
+        for task in self.database.get_tasks():
+            self._create_entry(task[1])
+
+    def _create_entry(self, text="Text shows up here", create_type="loading"):
         new_entry = TextButton(text=text,
                                size=(100, 50),
                                position=(0, 0),
@@ -63,11 +67,11 @@ class App:
                                align_left=True,
                                r=5,
                                )
-        self.bottom_panel.add(new_entry)
+        self.bottom_panel.add(new_entry, create_type=create_type)
 
     def _handle_events(self):
         for event in pygame.event.get():
-            if event.type in [pygame.QUIT] or event.type in [pygame.KEYDOWN] and event.key in [pygame.K_ESCAPE]:
+            if event.type in [pygame.QUIT]:  # or event.type in [pygame.KEYDOWN] and event.key in [pygame.K_ESCAPE]:
                 self._exit_app()
             elif event.type in [pygame.WINDOWRESIZED]:
                 self.panel_manager.update_position(Vector2(pygame.display.get_surface().get_size()))
