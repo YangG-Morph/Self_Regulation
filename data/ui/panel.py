@@ -14,7 +14,6 @@ class Panel(Base):
     def _adding(self, component, create_type):
 
         component.id = max(0, min(len(self.components), len(self.components) + 1))
-        print("Counting: ", len(self.components), " and set id: ", component.id)
         component.size.x = self.size.x / 2  # TODO remove?
         component.rebuild_surface()
         component.parent = self
@@ -26,7 +25,6 @@ class Panel(Base):
                 setattr(self, attribute, self.margin)
                 if not getattr(component, attribute):
                     setattr(component, attribute, 0)
-        print("Why is id: ", component.id)
         if self.allow_database and create_type == "save":
             self.database.insert(component.id, component.text_object.text)
         self.components.append(component)
@@ -37,7 +35,6 @@ class Panel(Base):
                 self._adding(element, create_type)
         else:
             self._adding(elements[0], create_type)
-        print("Did get here?")
         self.update_position(pygame.display.get_surface().get_size())
 
     def reset_components(self):
@@ -51,7 +48,6 @@ class Panel(Base):
         for component in self.components:
             if component.set_for_delete:
                 was_deleting = True
-                print("Deleting: ", component.text_object.text, " with id: ", component.id)
                 self.database.delete(component.id, component.text_object.text)
                 self.components.remove(component)
                 del component
