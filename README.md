@@ -1,7 +1,7 @@
 # Self_Regulation
 
 **WIP** - Todo list. Alarms. Get Things Done. <br />
-Set tasks, goals and alarms. <br />
+Set tasks, goals and alarms. Right click to delete tasks.<br />
 
 Do it now? What-? Yes? Maybe... <br />
 
