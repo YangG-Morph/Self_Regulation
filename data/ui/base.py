@@ -98,7 +98,7 @@ class Base:
             height = int(window_size.y)
             self.stretched_background_image = pygame.transform.smoothscale(self.background_image, (width, height))
         if self.parent:
-            self.size.x = self.parent.size.x / 2 # TODO might not need, remove later
+            self.size.x = self.parent.size.x * 0.7 # TODO might not need, remove later
 
         self.rebuild_surface()
 
