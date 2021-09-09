@@ -2,35 +2,49 @@ import pygame.display
 import pygame
 from data.ui.base import Base
 from data.constants import ALLOWED_KEYS
+from data.ui.text_button import TextButton
+
 
 class Panel(Base):
-    def __init__(self, allow_database=None, *args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, database=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.components = []
         self.component_clicked = False
-        self.database = None
-        self.allow_database = allow_database
+        self.database = database
 
-    def _adding(self, component, create_type):
-
-        component.id = max(0, min(len(self.components), len(self.components) + 1))
-        component.size.x = self.size.x / 2  # TODO remove?
+    def _adding(self, component, create_type):  # TODO don't put panels in panels
+        component.id = max(0, min(len(self.components),
+                                  len(self.components) + 1))  # TODO incorrect len since other panels inside
+        #component.size.x = self.size.x / 2  # TODO remove?
         component.rebuild_surface()
         component.parent = self
-        component.margin += self.margin
+        from data.ui.alarm import Alarm
+        # component.margin += self.margin
         for attribute in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
-            if getattr(self, attribute) != getattr(component, attribute):
-                setattr(component, attribute, getattr(component, attribute) + getattr(self, attribute))
+            # if isinstance(component, Alarm):
+            #    print(f"Parent {self} {attribute}: ", getattr(self, attribute))
+            #    print(f"Alarm {attribute}: ", getattr(component, attribute))
+            # if isinstance(component, Panel):
+            #    print(f"Parent {self} {attribute}: ", getattr(self, attribute))
+            #    print(f"Panel {attribute}: ", getattr(component, attribute))
+            # print(f"Alarm top: ", getattr(component, "margin_top"))
+            if getattr(self, attribute) != getattr(component, attribute) and getattr(component, attribute) == 0:
+                setattr(component, attribute, getattr(self, attribute))
+                # if isinstance(component, Alarm):
+                #    print(f"Parent {self} {attribute}: ", getattr(self, attribute))
+                #    print(f"Alarm {attribute}: ", getattr(component, attribute))
+                # setattr(component, attribute, getattr(component, attribute) + getattr(self, attribute))
             else:
-                setattr(self, attribute, self.margin)
+                setattr(component, attribute, getattr(component, attribute) + getattr(self, attribute))
+                # setattr(self, attribute, self.margin)
                 if not getattr(component, attribute):
                     setattr(component, attribute, 0)
-        if self.allow_database and create_type == "save":
+        if self.database and create_type == "save":
             self.database.insert(component.id, component.text_object.text)
         self.components.append(component)
 
-    def add(self, *elements, create_type):
-        if isinstance(elements,(tuple, list)):
+    def add(self, *elements, create_type=None):
+        if isinstance(elements, (tuple, list)):
             for i, element in enumerate(elements):
                 self._adding(element, create_type)
         else:
@@ -47,11 +61,13 @@ class Panel(Base):
         was_deleting = False
         for component in self.components:
             if component.set_for_delete:
+                #print("Deletion detected")
                 was_deleting = True
                 self.database.delete(component.id, component.text_object.text)
                 self.components.remove(component)
                 del component
         if was_deleting:
+            #print("Was deleting and database: ", self.database)
             self.database.create_table("temp")
             for i, component in enumerate(self.components):
                 component.id = i
@@ -65,14 +81,14 @@ class Panel(Base):
 
     def get_active_component(self):
         for component in self.components:
-            if hasattr(component, "input_mode") and component.input_mode:
+            if hasattr(component, "input_mode") and component.input_mode:  # TODO might work incorrectly if input_text is nested within panels
                 return component
         return None
 
     def handle_key_press(self, event):
         component = self.get_active_component()
         if component and event.key in ALLOWED_KEYS:
-            if event.key == pygame.K_BACKSPACE:  #TODO CTRL + BACKSPACE not working at the front of text
+            if event.key == pygame.K_BACKSPACE:  # TODO CTRL + BACKSPACE not working at the front of text
                 if component.caret.x > 0:
                     if event.mod & pygame.KMOD_CTRL:
                         space = component.input_text.rfind(" ") + 1
@@ -118,16 +134,13 @@ class Panel(Base):
                     component.input_text) else component.caret.x + 1
 
     def update_position(self, window_size):
-        super().update_position(window_size)
         self.size = pygame.Vector2(window_size)
+        super().update_position(self.size)
         self.rebuild_surface()
-        [obj.update_position(self.size) for obj in self.components]
+        [component.update_position(self.size) for component in self.components]
 
     def draw(self, surface):
         super().draw(surface)
         surface.blit(self.surface, self.position.xy)
-        #pygame.draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
+        # pygame.draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
         [obj.draw(surface) for obj in self.components]
-
-
-

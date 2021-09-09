@@ -19,7 +19,7 @@ class TextInput(Button):
         self.enter_press_action = enter_press_action
 
     @property
-    def left_click(self):
+    def left_click(self):  # Have the panel_manager handle all clicks?
         if self.hovered and pygame.mouse.get_pressed()[0] and not self.parent.component_clicked:  # TODO Should only run when click started on button
             return True
         return False
@@ -43,15 +43,10 @@ class TextInput(Button):
             self.prev_text = self.input_text
             self.text_object.set_text(self.input_text)
 
-
-
     def update_position(self, window_size):
         super().update_position(window_size)
         self.text_object.position.x = self.position.x + self.text_object.margin_left
-        self.text_object.position.y = self.position.y + (self.size.y + self.text_object.margin_top) / 8   # TODO Text position being reset
-
-    def left_action(self):
-        pass  # print("Doing action")
+        self.text_object.position.y = self.position.y + (self.size.y + self.text_object.margin_top) / 8
 
     def draw(self, surface):
         super().draw(surface)

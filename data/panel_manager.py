@@ -12,7 +12,7 @@ class PanelManager:
 
     def _adding(self, panel):
         if isinstance(panel, Panel):
-            panel.database = self.database  # TODO Find a better way, too much passing around
+            #panel.database = self.database  # TODO Find a better way, too much passing around
             self.panels.append(panel)
         else:
             raise TypeError(f"{panel} is not a Panel object. I only manage panels.")
@@ -22,7 +22,7 @@ class PanelManager:
             for panel in panels:
                 self._adding(panel)
         else:
-            print("Setting database 2")
+            #print("Setting database 2")
             self._adding(*panels)
 
     def update_position(self, window_size):
@@ -35,14 +35,27 @@ class PanelManager:
         if event.type in [pygame.MOUSEBUTTONDOWN]:
             [panel.reset_components() for panel in self.panels]
         elif event.type in [pygame.MOUSEBUTTONUP]:
-            [setattr(panel, "component_clicked", False) for panel in self.panels]
+            #print("setting all to false")  # TODO NOW need to look for nested panels
+            for panel in self.panels:  # TODO Finda better way, recursion?
+                for component in panel.components:
+                    if isinstance(component, Panel):
+                        #print("Component is: ", component)
+                        component.component_clicked = False
+                panel.component_clicked = False
+            #[setattr(panel, "component_clicked", False) for panel in self.panels]
 
     def update(self):
         panels_copy = self.panels.copy()
         panels_copy.reverse()
         self.component_clicked = True if [panel for panel in panels_copy if panel.component_clicked is True] else False
         if self.component_clicked:  # TODO only highlight one when dragging mouse over
-            [setattr(panel, "component_clicked", True) for panel in self.panels]
+            for panel in self.panels:  # TODO Finda better way, recursion?
+                for component in panel.components:
+                    if isinstance(component, Panel):
+                        #print("Component is: ", component)
+                        component.component_clicked = True
+                panel.component_clicked = True
+            #[setattr(panel, "component_clicked", True) for panel in self.panels]  # TODO NOW need to look for nested panels
 
         [panel.update() for panel in panels_copy]
 

@@ -73,7 +73,7 @@ class Base:
         self.position.y = window_size[1] / 2 - self.size[1] / 2
 
     def center(self, window_size):
-        self.start_pos = self.parent.position.xy if self.parent else Vector2(0, 0)
+        self.start_pos = Vector2(0, 0) #self.parent.position.xy if self.parent else Vector2(0, 0)
 
         if self.center_x and self.center_y:
             self._center_both(window_size)
@@ -98,7 +98,8 @@ class Base:
             height = int(window_size.y)
             self.stretched_background_image = pygame.transform.smoothscale(self.background_image, (width, height))
         if self.parent:
-            self.size.x = self.parent.size.x / 2
+            self.size.x = self.parent.size.x / 2 # TODO might not need, remove later
+
         self.rebuild_surface()
 
         if hasattr(self, "text_object"):

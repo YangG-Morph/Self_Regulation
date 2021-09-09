@@ -20,18 +20,21 @@ class TextButton(Button):
 
     @property
     def right_click(self):
-        if self.hovered and pygame.mouse.get_pressed()[2] and not self.parent.component_clicked:
+        if self.hovered and pygame.mouse.get_pressed()[2] and not self.parent.component_clicked:  # TODO parent panel not being reset
             return True
         return False
 
     def update(self):
         super().update()
-
         if self.left_click and not self.parent.component_clicked:
             self.parent.component_clicked = True
+            if self.parent.parent:
+                self.parent.parent.component_clicked = True
             self.left_action()
         elif self.right_click and not self.parent.component_clicked:
             self.parent.component_clicked = True
+            if self.parent.parent:
+                self.parent.parent.component_clicked = True
             self.set_for_delete = True
 
         self.position.y = (self.size.y + self.padding) * self.id + self.margin_top
