@@ -39,11 +39,7 @@ class Panel(Base):
             self._adding(elements[0], create_type)
         for component in self.components:
             if isinstance(component, Panel):
-                print("id: ", component.id)
-                print("size: ", self.size.x)
-                print("component: ", len(self.components))
                 component.size.x = component.id * self.size.x / len(self.components)
-                print("component size after: ", component.size.x)
         self.update_position(pygame.display.get_surface().get_size())
 
     def reset_components(self):
