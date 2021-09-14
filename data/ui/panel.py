@@ -11,36 +11,24 @@ class Panel(Base):
         self.components = []
         self.component_clicked = False
         self.database = database
+        self.resizable = True
+        self.id = None
 
-    def _adding(self, component, create_type):  # TODO don't put panels in panels
+    def _adding(self, component, create_type):
         component.id = max(0, min(len(self.components),
-                                  len(self.components) + 1))  # TODO incorrect len since other panels inside
-        #component.size.x = self.size.x / 2  # TODO remove?
+                                  len(self.components) + 1))
         component.rebuild_surface()
         component.parent = self
-        from data.ui.alarm import Alarm
-        # component.margin += self.margin
         for attribute in ["margin_top", "margin_left", "margin_right", "margin_bottom"]:
-            # if isinstance(component, Alarm):
-            #    print(f"Parent {self} {attribute}: ", getattr(self, attribute))
-            #    print(f"Alarm {attribute}: ", getattr(component, attribute))
-            # if isinstance(component, Panel):
-            #    print(f"Parent {self} {attribute}: ", getattr(self, attribute))
-            #    print(f"Panel {attribute}: ", getattr(component, attribute))
-            # print(f"Alarm top: ", getattr(component, "margin_top"))
             if getattr(self, attribute) != getattr(component, attribute) and getattr(component, attribute) == 0:
                 setattr(component, attribute, getattr(self, attribute))
-                # if isinstance(component, Alarm):
-                #    print(f"Parent {self} {attribute}: ", getattr(self, attribute))
-                #    print(f"Alarm {attribute}: ", getattr(component, attribute))
-                # setattr(component, attribute, getattr(component, attribute) + getattr(self, attribute))
             else:
                 setattr(component, attribute, getattr(component, attribute) + getattr(self, attribute))
-                # setattr(self, attribute, self.margin)
                 if not getattr(component, attribute):
                     setattr(component, attribute, 0)
         if self.database and create_type == "save":
             self.database.insert(component.id, component.text_object.text)
+
         self.components.append(component)
 
     def add(self, *elements, create_type=None):
@@ -49,6 +37,13 @@ class Panel(Base):
                 self._adding(element, create_type)
         else:
             self._adding(elements[0], create_type)
+        for component in self.components:
+            if isinstance(component, Panel):
+                print("id: ", component.id)
+                print("size: ", self.size.x)
+                print("component: ", len(self.components))
+                component.size.x = component.id * self.size.x / len(self.components)
+                print("component size after: ", component.size.x)
         self.update_position(pygame.display.get_surface().get_size())
 
     def reset_components(self):
@@ -56,18 +51,15 @@ class Panel(Base):
             if hasattr(component, "input_mode") and component.input_mode:
                 component.input_mode = False
                 component.input_text = "Enter task here..."
-
     def update(self, delta_time):
         was_deleting = False
         for component in self.components:
             if component.set_for_delete:
-                #print("Deletion detected")
                 was_deleting = True
                 self.database.delete(component.id, component.text_object.text)
                 self.components.remove(component)
                 del component
         if was_deleting:
-            #print("Was deleting and database: ", self.database)
             self.database.create_table("temp")
             for i, component in enumerate(self.components):
                 component.id = i

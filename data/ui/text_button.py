@@ -11,6 +11,7 @@ class TextButton(Button):
         self.text_object.set_font_size(font_size)
         self.is_pressed = False
         self.padding = 5
+        self.resizable = True
 
     @property
     def left_click(self):

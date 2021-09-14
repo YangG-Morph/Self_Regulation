@@ -17,6 +17,7 @@ class TextInput(Button):
         self.caret = Caret(pygame.Vector2(1, self.text_object.size.y))
         self.is_pressed = False
         self.enter_press_action = enter_press_action
+        self.resizable = True
 
     @property
     def left_click(self):  # Have the panel_manager handle all clicks?

@@ -11,7 +11,7 @@ def main():
 
     from data.app import App
     app = App(screen)
-    pygame.display.set_mode(GAME_SIZE, flags=pygame.RESIZABLE)
+    pygame.display.set_mode(GAME_SIZE)
     app.run()
 
 if __name__ == '__main__':

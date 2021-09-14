@@ -2,7 +2,6 @@ import pygame
 from pygame.math import Vector2
 from copy import deepcopy
 
-
 class Base:
     def __init__(self,
                  size=(10, 10),
@@ -25,6 +24,7 @@ class Base:
                  margin_bottom=0,
                  padding=0,
                  border=False,
+                 resizable=False,
                  ):
         self.size = Vector2(size)
         self.position = Vector2(position)
@@ -55,6 +55,7 @@ class Base:
         self.padding = padding
         self.border = border
         self.start_pos = self.parent.position.xy if self.parent else (0, 0)
+        self.resizable = resizable
         self._set_margins()
 
     def _set_margins(self):
@@ -82,12 +83,12 @@ class Base:
         elif self.center_y:
             self._center_y(window_size)
 
-        if self.position.x < self.margin_left:
+        if self.position.x <= self.margin_left:
             self.position.x = self.margin_left + self.start_pos.x
         elif self.position.x > window_size[0]:
             self.position.x = window_size[0] - self.margin_right - self.start_pos[0]
 
-        if self.position.y < self.margin_top:
+        if self.position.y <= self.margin_top:
             self.position.y = self.margin_top #+ self.start_pos.y
         elif self.position.y > window_size[1]:
             self.position.y = window_size[1] - self.margin_bottom - self.start_pos[1]
@@ -97,8 +98,18 @@ class Base:
             width = int(window_size.x)
             height = int(window_size.y)
             self.stretched_background_image = pygame.transform.smoothscale(self.background_image, (width, height))
+
+        from data.ui.panel import Panel
+        from data.ui.text_button import TextButton
+        from data.ui.text_input import TextInput
         if self.parent:
-            self.size.x = self.parent.size.x * 0.7 # TODO might not need, remove later
+            #if self.parent and isinstance(self, Panel):
+            #    self.size.x = self.parent.size.x / 2 #* 0.7 # TODO might not need, remove later
+            if isinstance(self, TextButton):
+                self.size.x = (self.parent.size.x / 2) - self.margin_right
+            elif isinstance(self, TextInput):
+                self.size.x = self.parent.size.x / 2
+
 
         self.rebuild_surface()
 
