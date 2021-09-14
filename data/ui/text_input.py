@@ -28,8 +28,8 @@ class TextInput(Button):
         self.text_object.set_text(text)
         self.input_text = ""
 
-    def update(self):
-        super().update()
+    def update(self, delta_time):
+        super().update(delta_time)
 
         if self.left_click and not self.parent.component_clicked:
             self.parent.component_clicked = True

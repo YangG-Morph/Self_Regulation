@@ -63,9 +63,11 @@ class App:
                                                                                                     create_type=create_type),
                                     )
 
-        self.alarm = Alarm(size=(10, 100),
+        self.alarm = Alarm(size=(250, 250),
                            bg_color=Color("lightblue").lerp((0, 0, 0), 0.5),
                            fg_color=Color("grey"),
+                           margin_left=250,
+                           margin_top=250,
                            )
 
         self.panel_manager.add(self.back_panel, self.top_panel, self.bottom_panel)
@@ -101,6 +103,7 @@ class App:
                 self.panel_manager.handle_key_press(event)
             elif event.type in [pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP]:
                 self.panel_manager.handle_mouse(event)
+                self.alarm.handle_events(event)
 
     def _exit_app(self):
         pygame.quit()
@@ -111,10 +114,11 @@ class App:
 
     def _main_loop(self):
         while True:
+            delta_time = self.clock.tick(FPS) / 1000
             self._handle_events()
 
-            self.panel_manager.update()
+            self.panel_manager.update(delta_time)
             self.panel_manager.draw()
 
-            self.clock.tick(FPS)
+
             pygame.display.flip()

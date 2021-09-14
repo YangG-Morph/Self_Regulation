@@ -44,7 +44,7 @@ class PanelManager:
                 panel.component_clicked = False
             #[setattr(panel, "component_clicked", False) for panel in self.panels]
 
-    def update(self):
+    def update(self, delta_time):
         panels_copy = self.panels.copy()
         panels_copy.reverse()
         self.component_clicked = True if [panel for panel in panels_copy if panel.component_clicked is True] else False
@@ -57,7 +57,7 @@ class PanelManager:
                 panel.component_clicked = True
             #[setattr(panel, "component_clicked", True) for panel in self.panels]  # TODO NOW need to look for nested panels
 
-        [panel.update() for panel in panels_copy]
+        [panel.update(delta_time) for panel in panels_copy]
 
     def draw(self):
         [panel.draw(self.screen) for panel in self.panels]

@@ -57,7 +57,7 @@ class Panel(Base):
                 component.input_mode = False
                 component.input_text = "Enter task here..."
 
-    def update(self):
+    def update(self, delta_time):
         was_deleting = False
         for component in self.components:
             if component.set_for_delete:
@@ -77,7 +77,7 @@ class Panel(Base):
             self.database.delete_all("temp")
             window_size = pygame.display.get_surface().get_size()
             [obj.update_position(window_size) for obj in self.components]
-        [component.update() for component in self.components]
+        [component.update(delta_time) for component in self.components]
 
     def get_active_component(self):
         for component in self.components:

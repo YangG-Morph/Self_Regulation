@@ -31,7 +31,7 @@ class Button(Base):
     def right_action(self):
         pass
 
-    def update(self):
+    def update(self, delta_time):
         if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
             self.rect.update(self.position.xy, self.rect.size)
 
@@ -43,11 +43,11 @@ class Button(Base):
 
     def update_position(self, window_size):
         super().update_position(window_size)
-        self.update()
+        self.update(None)
 
     def center(self, surface):
         super().center(surface)
-        self.update()
+        self.update(None)
 
     def draw(self, surface):
         super().draw(surface)

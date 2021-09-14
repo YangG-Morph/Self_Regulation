@@ -113,7 +113,7 @@ class Base:
         self.hover_surface.fill(self.bg_color.lerp((255, 255, 255), 0.1))
         self.rect = self.surface.get_rect(center=self.position.xy)
 
-    def update(self):
+    def update(self, delta_time):
         if self.position.xy != self.rect.topleft or self.size.xy != self.rect.size:
             self.rect.update(self.position.xy, self.rect.size)
 

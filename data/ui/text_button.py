@@ -24,8 +24,8 @@ class TextButton(Button):
             return True
         return False
 
-    def update(self):
-        super().update()
+    def update(self, delta_time):
+        super().update(delta_time)
         if self.left_click and not self.parent.component_clicked:
             self.parent.component_clicked = True
             if self.parent.parent:
