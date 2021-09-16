@@ -10,6 +10,9 @@ block_cipher = None
 assets = [
 	('data/assets/fonts', 'data/assets/fonts'),
 	('data/assets/images', 'data/assets/images'),
+	('data/assets/music', 'data/assets/music'),
+	('data/assets/sound', 'data/assets/sound'),
+
 
 ]
 
