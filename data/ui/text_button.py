@@ -13,18 +13,6 @@ class TextButton(Button):
         self.padding = 5
         self.resizable = True
 
-    @property
-    def left_click(self):
-        if self.hovered and pygame.mouse.get_pressed()[0] and not self.parent.component_clicked: # TODO Should only run when click started on button
-            return True
-        return False
-
-    @property
-    def right_click(self):
-        if self.hovered and pygame.mouse.get_pressed()[2] and not self.parent.component_clicked:  # TODO parent panel not being reset
-            return True
-        return False
-
     def update(self, delta_time):
         super().update(delta_time)
         if self.left_click and not self.parent.component_clicked:
@@ -46,7 +34,7 @@ class TextButton(Button):
         self.text_object.position.y = self.position.y + (self.size.y + self.text_object.margin_top) / 8
 
     def left_action(self):
-        pass  # print("Doing action")
+        pass
 
     def draw(self, surface):
         super().draw(surface)

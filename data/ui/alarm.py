@@ -1,6 +1,7 @@
 import pygame
 import math
 from data.ui.base import Base
+from data.sound_player import SoundPlayer
 
 class Alarm(Base):
     def __init__(self, *args, **kwargs):
@@ -12,6 +13,7 @@ class Alarm(Base):
         self.rendered_text = self.font.render(self.text, True, pygame.Color("Red"))
         self.timer = 0
         self.minutes = 3600
+        self.sound_player = SoundPlayer()
 
     @property
     def collide(self):
@@ -33,21 +35,29 @@ class Alarm(Base):
             self.timer = radians / (2*math.pi) * self.minutes
             direction = pygame.Vector2(mouse_pos[0] - self.position.x, mouse_pos[1] - self.position.y).normalize()  # TODO normalize crashes at 0
             self.hand_position = pygame.Vector2(direction.x * self.size.y + self.position.x, direction.y * self.size.y + self.position.y)
+            self.sound_player.stop()  # TODO sound_player check if it was stopped
 
-        if self.timer > 0:
+        if self.timer > 0 and not self.sound_player.get_busy():
             self.timer = max(0.0, self.timer - delta_time)
             self.rendered_text = self.font.render(f"{self.timer/60:.2f} minutes left", True, pygame.Color("Red"))
             radians = self.timer / self.minutes * (2*math.pi)
             x = math.cos(radians - 1/2*math.pi) * self.size.y + self.position.x
             y = math.sin(radians - 1/2*math.pi) * self.size.y + self.position.y
             self.hand_position = pygame.Vector2(x, y)
+            if self.timer <= 0.0:
+                self.sound_player.play("finished")
+        elif self.timer <= 0.0:
+            self.hand_position = pygame.Vector2(self.position.x, self.position.y - self.size.y)
 
     def handle_events(self, event):
         if event.type in [pygame.MOUSEBUTTONDOWN]:
             if self.left_click:
                 self.start_drag = True
         elif event.type in [pygame.MOUSEBUTTONUP]:
+            if self.start_drag:
+                self.sound_player.play("get_ready")
             self.start_drag = False
+
 
     def draw(self, surface):
         pygame.draw.circle(surface, pygame.Color("lightblue").lerp((0,0,0), 0.2), self.position, self.size[1])

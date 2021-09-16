@@ -69,7 +69,7 @@ class Panel(Base):
 
     def get_active_component(self):
         for component in self.components:
-            if hasattr(component, "input_mode") and component.input_mode:  # TODO might work incorrectly if input_text is nested within panels
+            if hasattr(component, "input_mode") and component.input_mode:
                 return component
         return None
 
@@ -130,5 +130,5 @@ class Panel(Base):
     def draw(self, surface):
         super().draw(surface)
         surface.blit(self.surface, self.position.xy)
-        # pygame.draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
+        #pygame.draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, 5)
         [obj.draw(surface) for obj in self.components]

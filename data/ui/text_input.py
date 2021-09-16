@@ -19,12 +19,6 @@ class TextInput(Button):
         self.enter_press_action = enter_press_action
         self.resizable = True
 
-    @property
-    def left_click(self):  # Have the panel_manager handle all clicks?
-        if self.hovered and pygame.mouse.get_pressed()[0] and not self.parent.component_clicked:  # TODO Should only run when click started on button
-            return True
-        return False
-
     def set_text(self, text):
         self.text_object.set_text(text)
         self.input_text = ""

@@ -6,6 +6,8 @@ GAME_SIZE = (1250, 750)
 CAPTION = "Self Regulation"
 FPS = 60
 
+MUSIC_END = pygame.USEREVENT + 0
+SOUND_END = pygame.USEREVENT + 1
 
 
 ALLOWED_KEYS = [

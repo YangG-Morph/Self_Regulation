@@ -1,4 +1,4 @@
-from pygame import Surface, mouse, draw
+import pygame
 
 from data.ui.text import Text
 from data.ui.base import Base
@@ -11,17 +11,17 @@ class Button(Base):
 
     @property
     def hovered(self):
-        return self.rect.collidepoint(mouse.get_pos())
+        return self.rect.collidepoint(pygame.mouse.get_pos())
 
     @property
     def left_click(self):
-        if self.hovered and mouse.get_pressed()[0]:
+        if self.hovered and pygame.mouse.get_pressed()[0] and not self.parent.component_clicked:
             return True
         return False
 
     @property
     def right_click(self):
-        if self.hovered and mouse.get_pressed()[2]:
+        if self.hovered and pygame.mouse.get_pressed()[2] and not self.parent.component_clicked:
             return True
         return False
 
@@ -53,10 +53,10 @@ class Button(Base):
         super().draw(surface)
         if self.hovered:
             surface.blit(self.hover_surface, self.position.xy)
-            draw.rect(surface, self.fg_color.lerp((0,0,0), 0.2), self.surface.get_rect(topleft=self.position.xy), 1, self.r)
+            pygame.draw.rect(surface, self.fg_color.lerp((0,0,0), 0.2), self.surface.get_rect(topleft=self.position.xy), 1, self.r)
         else:
             surface.blit(self.surface, self.position.xy)
-            draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, self.r)
+            pygame.draw.rect(surface, self.fg_color, self.surface.get_rect(topleft=self.position.xy), 1, self.r)
 
 
 
