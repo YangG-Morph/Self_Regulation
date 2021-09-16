@@ -1,6 +1,6 @@
 # Self_Regulation
 
-**WIP** - Todo list. Alarms. Get Things Done. <br />
+**WIP** - Todo list. Alarms. Get Things Done. <br /> <br />
 Set tasks, goals and alarms. Right click to delete tasks. <br />
 Put your own music in the music folder. <br />
 
