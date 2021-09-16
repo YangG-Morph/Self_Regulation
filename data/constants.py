@@ -2,7 +2,7 @@
 import pygame
 
 """ Constants """
-GAME_SIZE = (1250, 750)
+GAME_SIZE = (1280, 750)
 CAPTION = "Self Regulation"
 FPS = 60
 
