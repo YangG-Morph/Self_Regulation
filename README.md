@@ -8,7 +8,8 @@ Put your own music in the music folder. <br />
 
 <image src="https://user-images.githubusercontent.com/38061493/133556752-6f8070e4-7fda-4160-b60e-e85ca14be3e9.png" width="960" height="540"/>
 
-
+### Install necessary requirements
+    pip install -r requirements.txt
 ### TODO:
 * Drag and drop tasks
 * Robot for emotional support
