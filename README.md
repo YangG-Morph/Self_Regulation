@@ -1,11 +1,12 @@
 # Self_Regulation
 
 **WIP** - Todo list. Alarms. Get Things Done. <br />
-Set tasks, goals and alarms. Right click to delete tasks.<br />
+Set tasks, goals and alarms. Right click to delete tasks. <br />
+Put your own music in the music folder. <br />
 
 Do it now? What-? Yes? Maybe... <br />
 
-<image src="https://user-images.githubusercontent.com/38061493/133556251-4e85dd22-d965-4a45-aa77-61e5a4f4fbef.png" width="1024" height="600"/>
+<image src="https://user-images.githubusercontent.com/38061493/133556752-6f8070e4-7fda-4160-b60e-e85ca14be3e9.png" width="1024" height="600"/>
 
 
 ### TODO:
