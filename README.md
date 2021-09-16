@@ -1,18 +1,18 @@
 # Self_Regulation
 
 **WIP** - Todo list. Alarms. Get Things Done. <br />
-Set tasks, goals and alarms. Right click to delete tasks.<br />
+Set tasks, goals and alarms. Right click to delete tasks. <br />
+Put your own music in the music folder. <br />
 
-Do it now? What-? Yes? Maybe... <br />
 
-<image src="https://user-images.githubusercontent.com/38061493/132407393-890a7a32-f86e-4d50-bc06-08f474920156.png" width="1024" height="600"/>
+
+<image src="https://user-images.githubusercontent.com/38061493/133556752-6f8070e4-7fda-4160-b60e-e85ca14be3e9.png" width="960" height="540"/>
 
 
 ### TODO:
-* Add alarms
 * Drag and drop tasks
 * Robot for emotional support
-* Add pizzazz and cheers when tasks are finished
+* Add pizzazz when tasks are finished
 
 
 ### Assets:
