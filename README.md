@@ -20,3 +20,5 @@ Do it now? What-? Yes? Maybe... <br />
 Background image: https://wenrexa.itch.io/abstractbq <br />
 OpenDyslexic font: https://opendyslexic.org/ <br />
 Quicksand font: https://www.fontsquirrel.com/fonts/quicksand <br />
+Music by timbeek.com: https://timbeek.itch.io/royalty-free-music-pack <br />
+Sound by Dillon Becker: https://dillonbecker.itch.io/sdap <br />
