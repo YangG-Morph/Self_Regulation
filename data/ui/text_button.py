@@ -11,7 +11,10 @@ class TextButton(Button):
         self.text_object.set_font_size(font_size)
         self.is_pressed = False
         self.padding = 5
-        self.resizable = True
+
+
+    def delete_self(self):
+        self.set_for_delete = True
 
     def update(self, delta_time):
         super().update(delta_time)
@@ -24,7 +27,7 @@ class TextButton(Button):
             self.parent.component_clicked = True
             if self.parent.parent:
                 self.parent.parent.component_clicked = True
-            self.set_for_delete = True
+            self.right_action()
 
         self.position.y = (self.size.y + self.padding) * self.id + self.margin_top
 

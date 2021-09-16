@@ -105,9 +105,9 @@ class Base:
         if self.parent:
             #if self.parent and isinstance(self, Panel):
             #    self.size.x = self.parent.size.x / 2 #* 0.7 # TODO might not need, remove later
-            if isinstance(self, TextButton):
+            if isinstance(self, TextButton) and self.resizable:
                 self.size.x = (self.parent.size.x / 2) - self.margin_right
-            elif isinstance(self, TextInput):
+            elif isinstance(self, TextInput) and self.resizable:
                 self.size.x = self.parent.size.x / 2
 
 
