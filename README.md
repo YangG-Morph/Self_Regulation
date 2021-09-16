@@ -10,10 +10,9 @@ Put your own music in the music folder. <br />
 
 
 ### TODO:
-* Add alarms
 * Drag and drop tasks
 * Robot for emotional support
-* Add pizzazz and cheers when tasks are finished
+* Add pizzazz when tasks are finished
 
 
 ### Assets:
