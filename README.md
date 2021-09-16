@@ -5,7 +5,7 @@ Set tasks, goals and alarms. Right click to delete tasks.<br />
 
 Do it now? What-? Yes? Maybe... <br />
 
-<image src="https://user-images.githubusercontent.com/38061493/132407393-890a7a32-f86e-4d50-bc06-08f474920156.png" width="1024" height="600"/>
+<image src="https://user-images.githubusercontent.com/38061493/133556251-4e85dd22-d965-4a45-aa77-61e5a4f4fbef.png" width="1024" height="600"/>
 
 
 ### TODO:
