@@ -24,3 +24,4 @@ class SoundPlayer:
     def sound_end(self):
         if self._last_sound == self._sound_cached.get("get_ready"):
             self.channel.play(self._sound_cached.get("3_2_1"))
+            self._last_sound = self._sound_cached.get("3_2_1")
