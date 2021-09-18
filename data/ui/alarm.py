@@ -14,6 +14,7 @@ class Alarm(Base):
         self.timer = 0
         self.minutes = 3600
         self.sound_player = SoundPlayer()
+        self.finished = True
 
     @property
     def collide(self):
@@ -48,6 +49,7 @@ class Alarm(Base):
             x = math.cos(radians - 1/2*math.pi) * self.size.y + self.position.x
             y = math.sin(radians - 1/2*math.pi) * self.size.y + self.position.y
             self.hand_position = pygame.Vector2(x, y)
+            self.finished = False
             if self.timer <= 0.0:
                 self.sound_player.play("finished", -1)
         elif self.timer <= 0.0:
@@ -58,6 +60,7 @@ class Alarm(Base):
             if self.left_click:
                 self.start_drag = True
             elif self.right_click:
+                self.finished = True
                 self.sound_player.stop()
         elif event.type in [pygame.MOUSEBUTTONUP]:
             if self.start_drag:
@@ -69,7 +72,10 @@ class Alarm(Base):
         pygame.draw.circle(surface, pygame.Color("lightblue").lerp((0,0,0), 0.2), self.position, self.size[1])
         pygame.draw.circle(surface, pygame.Color("lightblue").lerp((100,100,100), 0.2), self.position, self.size[1] - 10)
         pygame.draw.circle(surface, pygame.Color("lightblue").lerp((255,255,255), 0.3), self.position, self.size[1] - 20)
-        pygame.draw.circle(surface, pygame.Color("red").lerp((100, 200, 100), .3), self.hand_position, 20)
+        if self.finished:
+            pygame.draw.circle(surface, pygame.Color("green").lerp((0, 0, 0), .5), self.hand_position, 20)
+        else:
+            pygame.draw.circle(surface, pygame.Color("red").lerp((0, 0, 0), .5), self.hand_position, 20)
         if self.collide:
             pygame.draw.circle(surface, pygame.Color("lightblue").lerp((0, 0, 0, 0), 0.2), self.rect.center, self.size[1] - 60)
         else:
