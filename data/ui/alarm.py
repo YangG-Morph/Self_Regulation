@@ -27,6 +27,10 @@ class Alarm(Base):
     def left_click(self):
         return pygame.mouse.get_pressed()[0] and self.collide
 
+    @property
+    def right_click(self):
+        return pygame.mouse.get_pressed()[2] and self.collide
+
     def update(self, delta_time):
         if self.start_drag:
             mouse_pos = pygame.mouse.get_pos()
@@ -45,7 +49,7 @@ class Alarm(Base):
             y = math.sin(radians - 1/2*math.pi) * self.size.y + self.position.y
             self.hand_position = pygame.Vector2(x, y)
             if self.timer <= 0.0:
-                self.sound_player.play("finished")
+                self.sound_player.play("finished", -1)
         elif self.timer <= 0.0:
             self.hand_position = pygame.Vector2(self.position.x, self.position.y - self.size.y)
 
@@ -53,6 +57,8 @@ class Alarm(Base):
         if event.type in [pygame.MOUSEBUTTONDOWN]:
             if self.left_click:
                 self.start_drag = True
+            elif self.right_click:
+                self.sound_player.stop()
         elif event.type in [pygame.MOUSEBUTTONUP]:
             if self.start_drag:
                 self.sound_player.play("get_ready")

@@ -10,8 +10,8 @@ class SoundPlayer:
         self.channel = pygame.mixer.Channel(5)
         self._last_sound = None
 
-    def play(self, sound_name):
-        self.channel.play(self._sound_cached.get(sound_name))
+    def play(self, sound_name, loops=0):
+        self.channel.play(self._sound_cached.get(sound_name), loops=loops)
 
     def stop(self):
         self.channel.stop()
@@ -23,5 +23,5 @@ class SoundPlayer:
 
     def sound_end(self):
         if self._last_sound == self._sound_cached.get("get_ready"):
-            self.channel.play(self._sound_cached.get("3_2_1"))
             self._last_sound = self._sound_cached.get("3_2_1")
+            self.channel.play(self._last_sound)
