@@ -70,7 +70,10 @@ class Alarm(Base):
         pygame.draw.circle(surface, pygame.Color("lightblue").lerp((100,100,100), 0.2), self.position, self.size[1] - 10)
         pygame.draw.circle(surface, pygame.Color("lightblue").lerp((255,255,255), 0.3), self.position, self.size[1] - 20)
         pygame.draw.circle(surface, pygame.Color("red").lerp((100, 200, 100), .3), self.hand_position, 20)
-        pygame.draw.circle(surface, pygame.Color("lightblue").lerp((0,0,0, 0), 0.2), self.rect.center, self.size[1] - 60)
+        if self.collide:
+            pygame.draw.circle(surface, pygame.Color("lightblue").lerp((0, 0, 0, 0), 0.2), self.rect.center, self.size[1] - 60)
+        else:
+            pygame.draw.circle(surface, pygame.Color("lightblue").lerp((0,0,0, 0), 0.4), self.rect.center, self.size[1] - 60)
         pygame.draw.circle(surface, pygame.Color("lightblue").lerp((255, 255, 255), 0.75), (self.position.x - 60, self.position.y - 130), 15)
         surface.blit(self.rendered_text, (self.position.x - self.rendered_text.get_width()/2, self.position.y - self.rendered_text.get_height()/2))
 
